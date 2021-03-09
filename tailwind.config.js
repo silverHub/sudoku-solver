@@ -2,10 +2,14 @@ module.exports = {
   purge: ["./public/index.html", "./src/**/*.tsx"],
   darkMode: false, // or 'media' or 'class'
   theme: {
-    extend: {},
+    extend: {
+      fontFamily: {
+        title: "Raleway",
+      },
+    },
   },
   variants: {
     extend: {},
   },
-  plugins: [],
+  plugins: [require("tailwindcss-textshadow")],
 };
