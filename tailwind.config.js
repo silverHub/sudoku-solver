@@ -5,6 +5,7 @@ module.exports = {
     extend: {
       fontFamily: {
         title: "Raleway",
+        board: "Rubik"
       },
     },
   },

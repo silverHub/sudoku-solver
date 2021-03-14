@@ -12,6 +12,8 @@ const EASY =
 const EMPTY =
   "000000000000000000000000000000000000000000000000000000000000000000000000000000000";
 
+const PRESET = [['EMPTY', EMPTY], ['EASY', EASY], ['MEDIUM', MEDIUM], ['HARD', HARD]];
+
 const VALID_CHARS = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"];
 const App: React.FC = () => {
   const [board, setBoard] = useState<string>("");
@@ -34,102 +36,87 @@ const App: React.FC = () => {
     e.target?.dataset?.preset && setBoard(e.target.dataset.preset);
   };
 
+  const onKeyDown = ({ key }) => {
+    console.log(key);
+    if (charsLeft === 0) {
+      return null;
+    }
+
+    if (key === 'Backspace') {
+      setBoard(board.slice(0, board.length - 1))
+    }
+
+    VALID_CHARS.includes(key) &&
+      setBoard(board + key)
+  };
+
   return (
-    <div className="min-h-screen  py-6 flex flex-col justify-center antialiased bg-gradient-to-b from-blue-400 to-blue-800">
+    <div
+      tabIndex={0}
+      onKeyDown={onKeyDown}
+      className="min-h-screen  py-6 flex flex-col justify-center antialiased bg-gradient-to-b from-blue-400 to-blue-800">
       <div className="container mx-auto">
-        <h1 className="w-auto text-center p-5 text-gray-50 mb-10 ">
+        <h1 className="w-auto text-center p-5 text-gray-50 mb-5 ">
           <span className="text-shadow-md text-6xl font-title uppercase tracking-tight">
             Sudoku-solver
           </span>
         </h1>
-
-        <div className="flex xl:mx-12">
-          <div className="flex-1 xl:mr-6 my-6 bg-opacity-5">
-            <div className="flex flex-col mx-auto p-4">
-              <h2 className="text-2xl text-gray-50 mb-3 text-center">
-                {boardReady
-                  ? "Board complete"
-                  : "Type in the sudoku values to create a board"}
-              </h2>
-              <div className="flex items-center">
-                <input
-                  id="sudoku-string"
-                  autoFocus
-                  maxLength={81}
-                  onChange={(e) =>
-                    (VALID_CHARS.includes(e.target.value.slice(-1)) ||
-                      e.target.value.length === 0) &&
-                    setBoard(e.target.value)
-                  }
-                  className="flex-1 my-6 p-3 text-xl text-gray-600 font-medium placeholder-gray-400 focus:ring-4 focus:ring-yellow-400 focus:outline-none focus:ring-offset-blue-500 focus:ring-offset-2"
-                  placeholder="type in the numbers, use 0 for empty spaces"
-                  value={board}
-                />
-                <span className="text-white italic inline-block font-light ml-5">
-                  {charsLeft} character left
-                </span>
-              </div>
-              <div className="flex justify-center space-x-4">
-                {boardReady && (
-                  <button
-                    type="button"
-                    className="p-3 bg-green-600 shadow-md text-white  rounded-lg font-semibold tracking-wide focus:ring-2 focus:ring-yellow-400 focus:outline-none focus:ring-offset-gray-600 focus:ring-offset-2"
-                    onClick={() => onSolve(board)}
-                  >
-                    Backtrack
-                  </button>
-                )}
-
-                <button
-                  type="button"
-                  disabled={charsLeft === 81}
-                  className="p-3 bg-red-600 shadow-md text-white  rounded-lg font-semibold tracking-wide focus:ring-2 focus:ring-yellow-400 focus:outline-none focus:ring-offset-gray-600 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed"
-                  onClick={() => setBoard("")}
-                >
-                  Reset
-                </button>
-              </div>
-            </div>
-          </div>
-          <div className="flex flex-col my-6 bg-gray-600 p-4 text-white">
-            <h2 className="text-2xl mb-3 text-center">Presets</h2>
-            <ul
-              className="space-y-3 font-light"
-              onClick={(e) => onPresetSelect(e)}
+        <div className="flex flex-col p-4 text-white">
+          <h2 className="text-2xl mb-3 text-center">Presets</h2>
+          <ul
+            className="flex justify-center gap-4"
+            onClick={(e) => onPresetSelect(e)}
+          >
+            {PRESET.map(([key, value]) => (<li
+              key={key}
+              className="cursor-pointer rounded-md border-gray-50 border p-2 hover:shadow-xl"
+              data-preset={value}
             >
-              <li
-                className="cursor-pointer rounded-md border-gray-50 border p-2"
-                data-preset={EMPTY}
-              >
-                EMPTY
-              </li>
-              <li
-                className="cursor-pointer rounded-md border-gray-50 border p-2"
-                data-preset={EASY}
-              >
-                EASY
-              </li>
-              <li
-                className="cursor-pointer rounded-md border-gray-50 border p-2"
-                data-preset={MEDIUM}
-              >
-                MEDIUM
-              </li>
-              <li
-                className="cursor-pointer rounded-md border-gray-50 border p-2"
-                data-preset={HARD}
-              >
-                HARD
-              </li>
-            </ul>
+              {key}
+            </li>
+            ))}
+          </ul>
+        </div>
+        <div className="flex flex-col xl:mx-12">
+          <div className="xl:mr-6 my-6 text-center h-24">
+            <h2
+              className="text-2xl text-gray-50 mb-3 text-center animate-pulse">
+              Type to create a board, use only numbers and 0 for the empty cell
+            </h2>
+            <div className="text-white italic inline-block font-light ml-5 leading-4 mt-4">
+              <span className="text-2xl">{charsLeft}</span> character left
+                </div>
           </div>
         </div>
         <Sudoku board={board} />
+
         {isSolving && (
           <span className="absolute inset-0 grid place-items-center opacity-75 text-3xl  text-white bg-black">
             Loading...
           </span>
         )}
+
+        <div className="flex justify-center space-x-4 mt-4 h-12">
+          <button
+            hidden={!boardReady}
+            type="button"
+            className="p-3 tracking-wider bg-green-600 shadow-md text-white  rounded-lg focus:ring-2 focus:ring-yellow-400 focus:outline-none focus:ring-offset-gray-600 focus:ring-offset-2"
+            onClick={() => onSolve(board)}
+          >
+            Solve
+            </button>
+          <button
+            type="button"
+            hidden={charsLeft === 81}
+            className="p-3 tracking-wider bg-red-500 shadow-md text-white  rounded-lg  focus:ring-2 focus:ring-yellow-400 focus:outline-none focus:ring-offset-gray-600 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed"
+            onClick={() => setBoard("")}
+          >
+            Reset
+                </button>
+
+
+        </div>
+
       </div>
     </div>
   );
