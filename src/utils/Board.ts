@@ -91,7 +91,7 @@ const clear = () => {
 };
 
 
-export default {
+const api = {
   create,
   createEmpty,
   print,
@@ -104,3 +104,4 @@ export default {
   get,
   set
 };
+export default api;
