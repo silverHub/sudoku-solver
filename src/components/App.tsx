@@ -51,25 +51,24 @@ const App: React.FC = () => {
   };
 
   return (
-    <div
-      tabIndex={0}
+    <div tabIndex={0}
       onKeyDown={onKeyDown}
-      className="min-h-screen  py-6 flex flex-col justify-center antialiased bg-gradient-to-b from-blue-400 to-blue-800">
+      className="min-h-screen py-2 antialiased min-w-min xl:py-6 xl:flex xl:flex-col xl:justify-center bg-gradient-to-b from-blue-400 to-blue-800 focus:outline-none">
       <div className="container mx-auto">
-        <h1 className="w-auto text-center p-5 text-gray-50 mb-5 ">
-          <span className="text-shadow-md text-6xl font-title uppercase tracking-tight">
+        <h1 className="p-5 text-center xl:mb-5 text-gray-50 ">
+          <span className="text-4xl tracking-tight uppercase xl:text-6xl text-shadow-md font-title">
             Sudoku-solver
           </span>
         </h1>
-        <div className="flex flex-col p-4 text-white">
-          <h2 className="text-2xl mb-3 text-center">Presets</h2>
+        <div className="flex flex-col text-white xl:p-4">
+          <h2 className="mb-3 tracking-wider text-center xl:text-2xl">Presets</h2>
           <ul
             className="flex justify-center gap-4"
             onClick={(e) => onPresetSelect(e)}
           >
             {PRESET.map(([key, value]) => (<li
               key={key}
-              className="cursor-pointer rounded-md border-gray-50 border p-2 hover:shadow-xl"
+              className="p-2 text-xs border rounded-md cursor-pointer xl:text-base border-gray-50 hover:shadow-xl"
               data-preset={value}
             >
               {key}
@@ -77,30 +76,34 @@ const App: React.FC = () => {
             ))}
           </ul>
         </div>
-        <div className="flex flex-col xl:mx-12">
-          <div className="xl:mr-6 my-6 text-center h-24">
-            <h2
-              className="text-2xl text-gray-50 mb-3 text-center animate-pulse">
-              Type to create a board, use only numbers and 0 for the empty cell
+        <div className="xl:mx-12">
+          <div className="my-6 text-center xl:mr-6">
+            {/*             <h2
+              className="mb-3 text-2xl text-center text-gray-50 animate-pulse">
+              Type to create a board
             </h2>
-            <div className="text-white italic inline-block font-light ml-5 leading-4 mt-4">
-              <span className="text-2xl">{charsLeft}</span> character left
+ */}            <p className="leading-loose xl:text-xl text-gray-50 text-shadow "
+            >
+              Type <kbd>0</kbd> for empty, <kbd>1</kbd><kbd>2</kbd><kbd>3</kbd><kbd>4</kbd><kbd>5</kbd><kbd>6</kbd><kbd>7</kbd><kbd>8</kbd><kbd>9</kbd> for values and <kbd>Backspace</kbd> for delete
+            </p>
+            <div className="inline-block mt-4 ml-5 italic font-light leading-4 text-white">
+              <span className="text-2xl font-normal">{charsLeft}</span> character left
                 </div>
           </div>
         </div>
         <Sudoku board={board} />
 
         {isSolving && (
-          <span className="absolute inset-0 grid place-items-center opacity-75 text-3xl  text-white bg-black">
+          <span className="absolute inset-0 grid text-3xl text-white bg-black opacity-75 place-items-center">
             Loading...
           </span>
         )}
 
-        <div className="flex justify-center space-x-4 mt-4 h-12">
+        <div className="flex justify-center mt-2 space-x-2 text-xs xl:text-base xl:mt-4 xl:space-x-4 xl:h-12">
           <button
             hidden={!boardReady}
             type="button"
-            className="p-3 tracking-wider bg-green-600 shadow-md text-white  rounded-lg focus:ring-2 focus:ring-yellow-400 focus:outline-none focus:ring-offset-gray-600 focus:ring-offset-2"
+            className="p-2 tracking-wider text-white bg-green-600 rounded-lg shadow-md xl:p-3 focus:ring-2 focus:ring-yellow-400 focus:outline-none focus:ring-offset-gray-600 focus:ring-offset-2"
             onClick={() => onSolve(board)}
           >
             Solve
@@ -108,7 +111,7 @@ const App: React.FC = () => {
           <button
             type="button"
             hidden={charsLeft === 81}
-            className="p-3 tracking-wider bg-red-500 shadow-md text-white  rounded-lg  focus:ring-2 focus:ring-yellow-400 focus:outline-none focus:ring-offset-gray-600 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed"
+            className="p-2 tracking-wider text-white bg-red-500 rounded-lg shadow-md xl:p-3 focus:ring-2 focus:ring-yellow-400 focus:outline-none focus:ring-offset-gray-600 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed"
             onClick={() => setBoard("")}
           >
             Reset

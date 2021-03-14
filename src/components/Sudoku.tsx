@@ -17,8 +17,9 @@ const getValue = (row: number, col: number, board: string): string => {
 const Sudoku: React.FC<SudokuProps> = ({ board }) => {
   return (
     <div
-      className="flex flex-wrap mx-auto"
-      style={{ width: "522px", height: "522px" }}
+      className="flex flex-wrap mx-auto w-sud-sm xl:w-sud-bg h-sud-sm xl:h-sud-bg"
+    // style={{ width: "522px", height: "522px" }}
+    //style={{ width: "270px", height: "270px" }}
     >
       {arr.map((row) =>
         arr.map((col) => (

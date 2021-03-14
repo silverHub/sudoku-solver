@@ -15,9 +15,9 @@ export interface ContentProps {
 
 const Content: React.FC<ContentProps> = ({ value, bg }) => {
   return (
-    <div className={`flex justify-center items-center h-14 transition-bg-opacity easy-in duration-150 ${bg} ${value ? "bg-opacity-70" : "bg-opacity-0"
+    <div className={`flex justify-center items-center h7 xl:h-14 rounded ${bg} ${value ? "bg-opacity-70" : "bg-opacity-0"
       }`} >
-      <span className=" text-2xl text-shadow-lg text font-board font-semibold text-white">
+      <span className="font-semibold text-white xl:text-2xl text-shadow-lg text font-board">
         {value && value.replace("0", ".")}
       </span>
     </div >
@@ -28,7 +28,7 @@ const Content: React.FC<ContentProps> = ({ value, bg }) => {
 const Cell: React.FC<CellProps> = ({ row, col, value }) => (
   <div
     key={row + col}
-    className={`w-14 h-14 mr-0.5 mb-0.5 border-dashed ${!value ? 'border' : ''} border-white border-opacity-50 rounded`}
+    className={` w-7 h-7 xl:w-14 xl:h-14 mr-0.5 mb-0.5 border-dashed ${!value ? 'border' : ''} border-white border-opacity-50 rounded`}
   >
     <Content value={value} bg={getBlock(row, col) % 2 === 0 ? "bg-yellow-500" : "bg-yellow-600"} />
   </div>

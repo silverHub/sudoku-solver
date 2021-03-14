@@ -7,6 +7,10 @@ module.exports = {
         title: "Raleway",
         board: "Rubik"
       },
+      spacing: {
+        "sud-sm": "270px",
+        "sud-bg": "522px"
+      }
     },
   },
   variants: {
