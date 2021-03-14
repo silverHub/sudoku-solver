@@ -15,9 +15,9 @@ export interface ContentProps {
 
 const Content: React.FC<ContentProps> = ({ value, bg }) => {
   return (
-    <div className={`flex justify-center items-center h7 xl:h-14 rounded ${bg} ${value ? "bg-opacity-70" : "bg-opacity-0"
+    <div className={`flex justify-center items-center h-7 xl:h-14 rounded ${bg} ${value ? "bg-opacity-70" : "bg-opacity-0"
       }`} >
-      <span className="font-semibold text-white xl:text-2xl text-shadow-lg text font-board">
+      <span className="font-semibold text-white xl:text-2xl text-shadow-lg font-board">
         {value && value.replace("0", ".")}
       </span>
     </div >

@@ -3,6 +3,7 @@ import Cell from "./Cell";
 
 export interface SudokuProps {
   board: string;
+  isSolving: boolean
 }
 
 const arr = [1, 2, 3, 4, 5, 6, 7, 8, 9];
@@ -14,10 +15,10 @@ const getValue = (row: number, col: number, board: string): string => {
   return slice[col - 1];
 };
 
-const Sudoku: React.FC<SudokuProps> = ({ board }) => {
+const Sudoku: React.FC<SudokuProps> = ({ board, isSolving }) => {
   return (
     <div
-      className="flex flex-wrap mx-auto w-sud-sm xl:w-sud-bg h-sud-sm xl:h-sud-bg"
+      className="relative flex flex-wrap mx-auto w-sud-sm xl:w-sud-bg h-sud-sm xl:h-sud-bg"
     // style={{ width: "522px", height: "522px" }}
     //style={{ width: "270px", height: "270px" }}
     >
@@ -31,6 +32,12 @@ const Sudoku: React.FC<SudokuProps> = ({ board }) => {
           />
         ))
       )}
+
+      <span className={`absolute inset-0 grid text-white bg-black ${isSolving ? "opacity-75" : "opacity-0"} transition-opacity ease-in-out duration-150 xl:text-3xl place-items-center`}>
+        Loading...
+        </span>
+
+
     </div>
   );
 };

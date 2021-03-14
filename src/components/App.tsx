@@ -29,7 +29,7 @@ const App: React.FC = () => {
       const res: BacktrackResult = Backtrack.solve(Board);
       setIsSolving(false);
       setBoard(res[1]);
-    }, 0);
+    }, 150);
   };
 
   const onPresetSelect = (e) => {
@@ -91,14 +91,7 @@ const App: React.FC = () => {
                 </div>
           </div>
         </div>
-        <Sudoku board={board} />
-
-        {isSolving && (
-          <span className="absolute inset-0 grid text-3xl text-white bg-black opacity-75 place-items-center">
-            Loading...
-          </span>
-        )}
-
+        <Sudoku board={board} isSolving={isSolving} />
         <div className="flex justify-center mt-2 space-x-2 text-xs xl:text-base xl:mt-4 xl:space-x-4 xl:h-12">
           <button
             hidden={!boardReady}
