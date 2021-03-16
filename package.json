@@ -1,5 +1,5 @@
 {
-  "name": "cra-tailwind-starter",
+  "name": "sudoku-solver",
   "version": "1.0.0",
   "private": true,
   "description": "React + TailwindCSS app boilerplate",
