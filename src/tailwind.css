@@ -5,26 +5,10 @@
 @tailwind utilities;
 
 @layer base {
-  body {
-    font-family: "Montserrat", sans-serif;
-    font-weight: "200";
-  }
-
-  kbd {
-    background-color: #eee;
-    border-radius: 3px;
-    border: 1px solid #b4b4b4;
-    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.2),
-      0 2px 0 0 rgba(255, 255, 255, 0.7) inset;
-    color: #333;
-    display: inline-block;
-    font-size: 0.85em;
-    font-weight: 700;
-    line-height: 1;
-    padding: 2px 4px;
-    white-space: nowrap;
+  #instructions kbd {
+    @apply inline-block px-2 py-1 font-mono text-sm font-bold leading-4 text-gray-700 bg-gray-100 border border-gray-300 rounded cursor-pointer whitespace-nowrap shadow-key;
   }
   kbd + kbd {
-    margin-left: 4px;
+    @apply ml-2;
   }
 }

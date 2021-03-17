@@ -1,140 +1,88 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Backtrack from "../utils/Backtrack";
 import Board from "../utils/Board";
+import Instructions from "./Instructions";
+import Title from "./Title";
+import Presets from "./Presets";
 import Sudoku from "./Sudoku";
-
-const HARD =
-  "000004105070005903000923040809000500020050070051006000307200000000400200000560801";
-const MEDIUM =
-  "071000382000001000300008006060102430040560010800000009000000620030014000100607940";
-const EASY =
-  "390020780001000040500910306009002430600849017200030500467001050005006170000300000";
-const EMPTY =
-  "000000000000000000000000000000000000000000000000000000000000000000000000000000000";
-
-const PRESET = [
-  ["EMPTY", EMPTY],
-  ["EASY", EASY],
-  ["MEDIUM", MEDIUM],
-  ["HARD", HARD],
-];
+import Controls from "./Controls";
+import Results from "./Results";
 
 const VALID_CHARS = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"];
+
 const App: React.FC = () => {
   const [board, setBoard] = useState<string>("");
-  const [isSolving, setIsSolving] = useState(false);
+  const [isSolving, setIsSolving] = useState<boolean>(false);
+  const [selectedPreset, setSelectedPreset] = useState<string>("");
+  const [isVerified, setIsVerified] = useState<boolean | null>(null);
+  const [result, setResult] = useState<BacktrackResult | null>(null);
   const charsLeft = 81 - board.length;
-  const boardReady = charsLeft === 0;
 
-  const onSolve = (board: string) => {
-    setIsSolving(true);
-    Board.create(board);
+  useEffect(() => {
+    // board validation
+    console.log("useEffect valudation runs", board);
 
-    setTimeout(() => {
-      const res: BacktrackResult = Backtrack.solve(Board);
-      setIsSolving(false);
-      setBoard(res[1]);
-    }, 150);
+    if (board.length === 81) {
+      setIsVerified(board.includes("0"));
+    }
+  }, [board]);
+
+  const onPresetSelect = (preset: string) => {
+    setSelectedPreset(preset);
+    setBoard(preset);
   };
 
-  const onPresetSelect = (e) => {
-    e.target?.dataset?.preset && setBoard(e.target.dataset.preset);
+  const onSolve = (board: string): void => {
+    if (isVerified) {
+      setIsSolving(true);
+      Board.create(board);
+
+      setTimeout(() => {
+        const res: BacktrackResult = Backtrack.solve(Board);
+        setResult(res);
+        setIsSolving(false);
+      }, 150);
+    }
+  };
+
+  const onReset = () => {
+    setSelectedPreset("");
+    setBoard("");
+    setIsVerified(null);
   };
 
   const onKeyDown = ({ key }) => {
-    console.log(key);
-    if (charsLeft === 0) {
-      return null;
-    }
-
-    if (key === "Backspace") {
+    if (key === "Backspace" && board.length !== 0) {
       setBoard(board.slice(0, board.length - 1));
     }
 
-    VALID_CHARS.includes(key) && setBoard(board + key);
-  };
+    if (charsLeft === 0 || !VALID_CHARS.includes(key)) {
+      return null;
+    }
 
-  // TODO: check if board is valid, add click handling to buttons for mobile
+    setBoard(board + key);
+  };
 
   return (
     <div
       tabIndex={0}
       onKeyDown={onKeyDown}
-      className="min-h-screen py-2 antialiased min-w-min xl:py-6 xl:flex xl:flex-col xl:justify-center bg-gradient-to-b from-blue-400 to-blue-800 focus:outline-none"
+      className="min-h-screen py-2 antialiased font-light min-w-min md:py-6 md:flex md:flex-col md:justify-center bg-gradient-to-b from-blue-400 to-blue-800 focus:outline-none font-base"
     >
       <div className="container mx-auto">
-        <h1 className="p-5 text-center xl:mb-5 text-gray-50 ">
-          <span className="text-4xl tracking-tight uppercase xl:text-6xl text-shadow-md font-title">
-            Sudoku-solver
-          </span>
-        </h1>
-        <div className="flex flex-col text-white xl:p-4 xl:mb-6">
-          <h2 className="mb-3 tracking-wider text-center xl:text-2xl">
-            Presets
-          </h2>
-          <ul
-            className="flex justify-center gap-4"
-            onClick={(e) => onPresetSelect(e)}
-          >
-            {PRESET.map(([key, value]) => (
-              <li
-                key={key}
-                className="p-2 text-xs border rounded-md cursor-pointer xl:text-base border-gray-50 hover:shadow-xl"
-                data-preset={value}
-              >
-                {key}
-              </li>
-            ))}
-          </ul>
-        </div>
-        <div className="xl:mx-12">
-          <div className="my-6 text-center xl:mr-6">
-            <p
-              className="font-light leading-loose xl:text-xl text-gray-50 text-shadow xl:mb-6"
-              onClick={(e) => {
-                const target: any = e.target;
-                target.nodeName === "KBD" &&
-                  onKeyDown({ key: target.innerText });
-              }}
-            >
-              <span className="hidden xl:block">Type</span>{" "}
-              <span className="xl:hidden">Click</span> <kbd>0</kbd> for empty,{" "}
-              <br className="xl:hidden" /> <kbd>1</kbd>
-              <kbd>2</kbd>
-              <kbd>3</kbd>
-              <kbd>4</kbd>
-              <kbd>5</kbd>
-              <kbd>6</kbd>
-              <kbd>7</kbd>
-              <kbd>8</kbd>
-              <kbd>9</kbd> for values <br className="xl:hidden" /> and{" "}
-              <kbd>Backspace</kbd> for delete
-            </p>
-            <div className="inline-block mt-4 ml-5 italic font-light leading-4 text-white">
-              <span className="text-3xl font-normal">{charsLeft}</span>{" "}
-              character left
-            </div>
-          </div>
-        </div>
+        <Title />
+        <Presets onPresetSelect={onPresetSelect} selected={selectedPreset} />
+        <Instructions onKeyDown={onKeyDown} charsLeft={charsLeft} />
         <Sudoku board={board} isSolving={isSolving} />
-        <div className="flex justify-center mt-2 space-x-2 text-xs xl:text-base xl:mt-4 xl:space-x-4 xl:h-12">
-          <button
-            hidden={!boardReady}
-            type="button"
-            className="p-2 tracking-wider text-white bg-green-600 rounded-lg shadow-md xl:p-3 focus:ring-2 focus:ring-yellow-400 focus:outline-none focus:ring-offset-gray-600 focus:ring-offset-2"
-            onClick={() => onSolve(board)}
-          >
-            Solve
-          </button>
-          <button
-            type="button"
-            hidden={charsLeft === 81}
-            className="p-2 tracking-wider text-white bg-red-500 rounded-lg shadow-md xl:p-3 focus:ring-2 focus:ring-yellow-400 focus:outline-none focus:ring-offset-gray-600 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed"
-            onClick={() => setBoard("")}
-          >
-            Reset
-          </button>
-        </div>
+        <Results isVerified={isVerified} result={result} />
+        {isVerified}
+        <Controls
+          isSolving={isSolving}
+          onSolve={() => onSolve(board)}
+          onReset={onReset}
+          charsLeft={charsLeft}
+          isVerified={isVerified}
+        />
       </div>
     </div>
   );
