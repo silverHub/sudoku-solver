@@ -2,7 +2,7 @@ import Backtrack, {
   getIndex,
   isValid,
   isDistinct,
-  findNextValue
+  findNextValue,
 } from "./Backtrack";
 import Board from "./Board";
 
@@ -29,7 +29,7 @@ describe("Board", () => {
       isDistinct(
         new Map([
           ["1", 1],
-          ["2", 2]
+          ["2", 2],
         ])
       )
     ).toBe(true);
@@ -37,7 +37,7 @@ describe("Board", () => {
       isDistinct(
         new Map([
           ["1", 1],
-          ["2", 1]
+          ["2", 1],
         ])
       )
     ).toBe(false);
@@ -81,19 +81,27 @@ describe("Board", () => {
   });
 
   describe("solve", () => {
-    
-
     test("remove one cell from solved board", () => {
       Board.create(SOLVED);
       Board.set(1, 1, 0);
-      expect(Backtrack.solve(Board)).toEqual([true, SOLVED, expect.anything()]);
+      expect(Backtrack.solve(Board)).toEqual({
+        error: null,
+        isSolutionFound: true,
+        solution: SOLVED,
+        statistics: expect.anything(),
+      });
     });
 
     test("remove 2 cells from solved board", () => {
       Board.create(SOLVED);
       Board.set(1, 1, 0);
       Board.set(9, 9, 0);
-      expect(Backtrack.solve(Board)).toEqual([true, SOLVED, expect.anything()]);
+      expect(Backtrack.solve(Board)).toEqual({
+        error: null,
+        isSolutionFound: true,
+        solution: SOLVED,
+        statistics: expect.anything(),
+      });
     });
 
     test("remove random cells from solved board", () => {
@@ -102,10 +110,21 @@ describe("Board", () => {
       Board.set(9, 9, 0);
       Board.set(4, 4, 0);
       Board.set(5, 5, 0);
-      expect(Backtrack.solve(Board)).toEqual([true, SOLVED, expect.anything()]);
+      expect(Backtrack.solve(Board)).toEqual({
+        error: null,
+        isSolutionFound: true,
+        solution: SOLVED,
+        statistics: expect.anything(),
+      });
     });
     test("solve empty board", () => {
-      expect(Backtrack.solve(Board)).toEqual([true, "123456789456789123789123456214365897365897214897214365531642978642978531978531642", expect.anything()]); 
+      expect(Backtrack.solve(Board)).toEqual({
+        error: null,
+        isSolutionFound: true,
+        solution:
+          "123456789456789123789123456214365897365897214897214365531642978642978531978531642",
+        statistics: expect.anything(),
+      });
     });
   });
 });
