@@ -1,5 +1,7 @@
 import * as React from "react";
 import Cell from "./Cell";
+import CellContent from "./CellContent";
+import { getBlock } from "../../utils/Board";
 
 export interface SudokuProps {
   base: string;
@@ -25,14 +27,28 @@ const Sudoku: React.FC<SudokuProps> = ({
   return (
     <div className="relative flex flex-wrap mx-auto w-sud-sm md:w-sud-bg h-sud-sm md:h-sud-bg">
       {arr.map((row) =>
-        arr.map((col) => (
-          <Cell
-            key={row + col}
-            row={row}
-            col={col}
-            value={getValue(row, col, base)}
-          />
-        ))
+        arr.map((col) => {
+          const baseValue: string = getValue(row, col, base);
+          const value: string =
+            showResult && baseValue === "0" && solution
+              ? getValue(row, col, solution)
+              : baseValue;
+
+          return (
+            <Cell key={row + col} showBorder={!value}>
+              <CellContent
+                isVisible={!!value}
+                bg={
+                  getBlock(row, col) % 2 === 0
+                    ? "bg-yellow-500"
+                    : "bg-yellow-600"
+                }
+              >
+                {value && value.replace("0", ".")}
+              </CellContent>
+            </Cell>
+          );
+        })
       )}
       {children}
     </div>

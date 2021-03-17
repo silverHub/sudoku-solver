@@ -6,7 +6,7 @@ import Title from "./Title";
 import Presets from "./Presets";
 import Sudoku from "./Board/Sudoku";
 import Controls from "./Controls";
-import Results from "./Results";
+import Results from "./Board/Results";
 import Overlay from "./Board/Overlay";
 
 const VALID_CHARS = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"];
@@ -86,7 +86,7 @@ const App: React.FC = () => {
           solution={result?.solution || ""}
           showResult={showResult}
         >
-          <Overlay show={isSolving || !!result}>
+          <Overlay show={isSolving || (!!result && !showResult)}>
             <>
               {isSolving && "Solving..."}
               <Results isVerified={isVerified} result={result} />
@@ -98,10 +98,11 @@ const App: React.FC = () => {
           isSolving={isSolving}
           onSolve={() => onSolve(board)}
           onReset={onReset}
-          onShowResult={() => setShowResult(true)}
+          toggleShowResult={() => setShowResult(!showResult)}
           charsLeft={charsLeft}
           isVerified={isVerified}
           hasResult={!!result}
+          showResult={showResult}
         />
       </div>
     </div>

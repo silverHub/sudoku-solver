@@ -55,6 +55,7 @@ const  createResult = (isSolutionFound:boolean,solution:string, error:any, stati
   };
 }
 
+
 const noSolution = (ind: number): boolean => ind < 0;
 const solutionFound = (length: number, ind: number): boolean => ind === length;
 
@@ -74,7 +75,7 @@ const solutionFound = (length: number, ind: number): boolean => ind === length;
  */
 
 const solve = (board: Board): BacktrackResult => {
-  //const executionStart = window.performance.now();
+  const executionStart = window.performance.now();
 
   // get empty cells
   const emptyCells: [string, number][] = [...board.empties().entries()];
@@ -113,10 +114,10 @@ const solve = (board: Board): BacktrackResult => {
       }
     } while (!noSolution(ind) && !solutionFound(emptyCells.length, ind));
 
-    //const executionEnd = window.performance.now();
-    //const elapsedTime = `Execution time: ${executionEnd - executionStart} ms`;
+    const executionEnd = window.performance.now();
+    const elapsedTime = executionEnd - executionStart;
     const statistics = {
-      //elapsedTime,
+      elapsedTime,
       nbrOfIteration,
     };
 

@@ -2,7 +2,7 @@ type BacktrackResult = {
   isSolutionFound: boolean,
   solution: string,
   error: any,
-  statistics: {nbrOfIteration: number, elapsedTime?:'string'}
+  statistics: {nbrOfIteration: number, elapsedTime?:number}
 };
 
 type Board = {
