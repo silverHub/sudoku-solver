@@ -1,4 +1,9 @@
-type BacktrackResult = [boolean, string, any];
+type BacktrackResult = {
+  isSolutionFound: boolean,
+  solution: string,
+  error: any,
+  statistics: {nbrOfIteration: number, elapsedTime?:'string'}
+};
 
 type Board = {
   create: (str: string) => void;

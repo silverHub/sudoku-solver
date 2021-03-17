@@ -21,7 +21,8 @@ module.exports = {
     extend: {
       opacity: ["disabled"],
       transform: ["disabled"],
-      backgroundColor:["disabled"]
+      backgroundColor: ["disabled"],
+      cursor: ["disabled"]
     },
   },
   plugins: [require("tailwindcss-textshadow")],

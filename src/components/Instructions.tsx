@@ -3,12 +3,15 @@ import React from "react";
 export interface InstructionsProps {
   onKeyDown: (e: { key: string }) => void;
   charsLeft: number;
+  hidden: boolean;
 }
 
 const Instructions: React.FC<InstructionsProps> = ({
   onKeyDown,
   charsLeft,
+  hidden,
 }) => {
+  if (hidden) return null;
   return (
     <div className="md:mx-12">
       <div className="my-6 text-center md:mr-6">

@@ -2,8 +2,9 @@ import * as React from "react";
 import Cell from "./Cell";
 
 export interface SudokuProps {
-  board: string;
-  isSolving: boolean;
+  base: string;
+  solution: string;
+  showResult: boolean;
 }
 
 const arr = [1, 2, 3, 4, 5, 6, 7, 8, 9];
@@ -15,7 +16,12 @@ const getValue = (row: number, col: number, board: string): string => {
   return slice[col - 1];
 };
 
-const Sudoku: React.FC<SudokuProps> = ({ board, isSolving }) => {
+const Sudoku: React.FC<SudokuProps> = ({
+  base,
+  solution,
+  showResult,
+  children,
+}) => {
   return (
     <div className="relative flex flex-wrap mx-auto w-sud-sm md:w-sud-bg h-sud-sm md:h-sud-bg">
       {arr.map((row) =>
@@ -24,18 +30,11 @@ const Sudoku: React.FC<SudokuProps> = ({ board, isSolving }) => {
             key={row + col}
             row={row}
             col={col}
-            value={getValue(row, col, board)}
+            value={getValue(row, col, base)}
           />
         ))
       )}
-
-      <span
-        className={`absolute inset-0 grid text-white bg-black ${
-          isSolving ? "opacity-75" : "opacity-0"
-        } transition-opacity ease-in-out duration-150 md:text-3xl place-items-center`}
-      >
-        Loading...
-      </span>
+      {children}
     </div>
   );
 };

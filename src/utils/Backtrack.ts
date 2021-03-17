@@ -46,6 +46,15 @@ export const findNextValue = (
   }
 };
 
+const  createResult = (isSolutionFound:boolean,solution:string, error:any, statistics:any):BacktrackResult => {
+  return {
+    isSolutionFound,
+    solution,
+    error,
+    statistics
+  };
+}
+
 const noSolution = (ind: number): boolean => ind < 0;
 const solutionFound = (length: number, ind: number): boolean => ind === length;
 
@@ -99,7 +108,7 @@ const solve = (board: Board): BacktrackResult => {
       } else {
         // zero current cell
         cell[1] = 0;
-        // get previous cell
+        // back to previous cell
         ind--;
       }
     } while (!noSolution(ind) && !solutionFound(emptyCells.length, ind));
@@ -112,19 +121,17 @@ const solve = (board: Board): BacktrackResult => {
     };
 
     if (noSolution(ind)) {
-      //console.log("No solution found. Nbr of iteration " + nbrOfIteration);
-      return [false, "", statistics];
+      return createResult(false,"",null,statistics);
     }
 
     if (solutionFound(emptyCells.length, ind)) {
-      //console.log("Solution found: Nbr of iteration: " + nbrOfIteration, board.print());
-      return [true, board.print(), statistics];
+      return createResult(true, board.print(),null, statistics);
     }
 
-    return [false, "", statistics];
+    return createResult(false,"",null,statistics);
   } catch (err) {
     console.log("Error", err);
-    return [false, err, null];
+    return createResult(false, "", err, null);
   }
 };
 

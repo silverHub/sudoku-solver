@@ -4,9 +4,10 @@ import Board from "../utils/Board";
 import Instructions from "./Instructions";
 import Title from "./Title";
 import Presets from "./Presets";
-import Sudoku from "./Sudoku";
+import Sudoku from "./Board/Sudoku";
 import Controls from "./Controls";
 import Results from "./Results";
+import Overlay from "./Board/Overlay";
 
 const VALID_CHARS = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"];
 
@@ -16,18 +17,20 @@ const App: React.FC = () => {
   const [selectedPreset, setSelectedPreset] = useState<string>("");
   const [isVerified, setIsVerified] = useState<boolean | null>(null);
   const [result, setResult] = useState<BacktrackResult | null>(null);
+  const [showResult, setShowResult] = useState<boolean>(false);
   const charsLeft = 81 - board.length;
 
   useEffect(() => {
     // board validation
-    console.log("useEffect valudation runs", board);
-
     if (board.length === 81) {
       setIsVerified(board.includes("0"));
+    } else {
+      setIsVerified(false);
     }
   }, [board]);
 
-  const onPresetSelect = (preset: string) => {
+  const onPresetSelect = (preset: string): void => {
+    onReset();
     setSelectedPreset(preset);
     setBoard(preset);
   };
@@ -48,7 +51,8 @@ const App: React.FC = () => {
   const onReset = () => {
     setSelectedPreset("");
     setBoard("");
-    setIsVerified(null);
+    setResult(null);
+    setShowResult(false);
   };
 
   const onKeyDown = ({ key }) => {
@@ -72,16 +76,32 @@ const App: React.FC = () => {
       <div className="container mx-auto">
         <Title />
         <Presets onPresetSelect={onPresetSelect} selected={selectedPreset} />
-        <Instructions onKeyDown={onKeyDown} charsLeft={charsLeft} />
-        <Sudoku board={board} isSolving={isSolving} />
-        <Results isVerified={isVerified} result={result} />
-        {isVerified}
+        <Instructions
+          hidden={!!result}
+          onKeyDown={onKeyDown}
+          charsLeft={charsLeft}
+        />
+        <Sudoku
+          base={board}
+          solution={result?.solution || ""}
+          showResult={showResult}
+        >
+          <Overlay show={isSolving || !!result}>
+            <>
+              {isSolving && "Solving..."}
+              <Results isVerified={isVerified} result={result} />
+            </>
+          </Overlay>
+        </Sudoku>
+
         <Controls
           isSolving={isSolving}
           onSolve={() => onSolve(board)}
           onReset={onReset}
+          onShowResult={() => setShowResult(true)}
           charsLeft={charsLeft}
           isVerified={isVerified}
+          hasResult={!!result}
         />
       </div>
     </div>

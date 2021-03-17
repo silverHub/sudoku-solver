@@ -1,5 +1,5 @@
 import * as React from "react";
-import { getBlock } from "../utils/Board";
+import { getBlock } from "../../utils/Board";
 
 export interface CellProps {
   row: number;
